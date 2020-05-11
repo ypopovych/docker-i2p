@@ -25,6 +25,7 @@ RUN apt-get -y update \
   && sed -i 's/.*\(en_US\.UTF-8\)/\1/' /etc/locale.gen \
   && /usr/sbin/locale-gen \
   && /usr/sbin/update-locale LANG=${LANG} LANGUAGE=${LANGUAGE} \
+  && echo "" > /etc/java-8-openjdk/accessibility.properties \
   && sed -i 's/127\.0\.0\.1/0.0.0.0/g' ${I2P_DIR}/i2ptunnel.config \
   && sed -i 's/::1,127\.0\.0\.1/0.0.0.0/g' ${I2P_DIR}/clients.config \
   && printf "i2cp.tcp.bindAllInterfaces=true\n" >> ${I2P_DIR}/router.config \
