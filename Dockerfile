@@ -16,7 +16,7 @@ ADD expect /tmp/expect
 ADD entrypoint.sh /entrypoint.sh
 
 # The main layer
-RUN apk --no-cache add openssl openjdk8-jre-base gcompat mailcap su-exec expect \
+RUN apk --no-cache add openssl openjdk8-jre-base gcompat mailcap shadow su-exec expect \
     && mkdir /lib64 && cd /lib64 && ln -s /lib/ld-linux-* \
     && wget -O /tmp/i2pinstall.jar https://download.i2p2.de/releases/${I2P_VERSION}/i2pinstall_${I2P_VERSION}.jar \
     && echo "${I2P_SHASUM}" | sha256sum -c \
