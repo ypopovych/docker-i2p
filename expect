@@ -1,0 +1,9 @@
+#!/usr/bin/expect
+set timeout 15;
+spawn java -jar /tmp/i2pinstall.jar -console
+expect {
+ -re "Select your language*" {send "0\r"; exp_continue;}
+ -re ".*Press 1 to continue, 2 to quit, 3 to redisplay" {send "1\r"; exp_continue;}
+ -re "Select the installation path*" {send "/opt/i2p\r"; exp_continue;}
+ -re "Enter O for OK, C to Cancel*" {send "O\r"; exp_continue;}
+}

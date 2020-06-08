@@ -1,25 +1,31 @@
-#!/bin/bash
+#!/bin/sh
 
-SGID=`getent group i2psvc | cut -d: -f3`
-SUID=`id -u i2psvc`
+SGID=`getent group i2p | cut -d: -f3`
+SUID=`id -u i2p`
 
 if [[ "$PGID" != "" && "$SGID" != "$PGID" ]]; then
-  groupmod -g "$PGID" i2psvc
+  groupmod -g "$PGID" i2p
 fi
 
 if [[ "$PUID" != "" && "$SUID" != "$PUID" ]]; then
-  usermod -u "$PUID" -g "$PGID" i2psvc
+  usermod -u "$PUID" -g "$PGID" i2p
 fi
 
 if [[ -z "$MEM_MAX" ]]; then
   MEM_MAX="128"
 fi
 
-sed -i "s/^wrapper\.java\.maxmemory=[0-9]*$/wrapper.java.maxmemory=${MEM_MAX}/g" /etc/i2p/wrapper.config
+sed -i "s/^wrapper\.java\.maxmemory=[0-9]*$/wrapper.java.maxmemory=${MEM_MAX}/g" $I2P_PREFIX/wrapper.config
 
 # Ensure user rights
-mkdir -p /var/lib/i2p/i2p-config
-chown -R i2psvc:$PGID /var/lib/i2p
-chmod -R u+rwx /var/lib/i2p
+chown -R i2p:$PGID /storage
+chown -R i2p:$PGID $I2P_PREFIX
+chmod -R u+rwx /storage
+chmod -R u+rwx $I2P_PREFIX
 
-exec gosu i2psvc /usr/bin/i2prouter console
+exec su-exec i2p $I2P_PREFIX/i2psvc $I2P_PREFIX/wrapper.config wrapper.pidfile=/var/tmp/i2p.pid \
+   wrapper.name=i2p \
+   wrapper.displayname="I2P Service" \
+   wrapper.statusfile=/var/tmp/i2p.status \
+   wrapper.java.statusfile=/var/tmp/i2p.java.status \
+   wrapper.logfile=
