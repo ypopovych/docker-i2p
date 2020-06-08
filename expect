@@ -1,5 +1,5 @@
 #!/usr/bin/expect
-set timeout 15;
+set timeout 60;
 spawn java -jar /tmp/i2pinstall.jar -console
 expect {
  -re "Select your language*" {send "0\r"; exp_continue;}
