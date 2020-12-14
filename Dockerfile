@@ -1,4 +1,4 @@
-FROM alpine:3
+FROM debian:stable-slim
 
 LABEL maintainer="Yehor Popovych <popovych.yegor@gmail.com>"
 
@@ -7,8 +7,7 @@ ENV I2P_PREFIX="/opt/i2p"
 ENV I2P_SHASUM="5dd5c300d3d2ca4eb7f7b33a2d4c9e54814f02c199c5176db17f214c8ab655d2  /tmp/i2pinstall.jar"
 
 # adding i2p user
-RUN mkdir /storage \
-    && adduser -g i2p -h /storage --disabled-password i2p \
+RUN useradd -d /storage -U -m i2p \
     && chown -R i2p:i2p /storage
 
 # Adding files first, since expect is required for installation
@@ -16,17 +15,20 @@ ADD expect /tmp/expect
 ADD entrypoint.sh /entrypoint.sh
 
 # The main layer
-RUN apk --no-cache add openssl openjdk8-jre fontconfig ttf-dejavu gcompat mailcap shadow su-exec expect \
-    && mkdir /lib64 && cd /lib64 && ln -s /lib/ld-linux-* \
+RUN mkdir -p /usr/share/man/man1 \
+    && apt-get update && apt-get install -y default-jre-headless gosu expect wget \
     && wget -O /tmp/i2pinstall.jar https://download.i2p2.de/releases/${I2P_VERSION}/i2pinstall_${I2P_VERSION}.jar \
     && echo "${I2P_SHASUM}" | sha256sum -c \
     && mkdir -p /opt \
     && chown i2p:i2p /opt \
     && chmod u+rw /opt \
-    && su-exec i2p expect -f /tmp/expect \
+    && gosu i2p expect -f /tmp/expect \
     && cd ${I2P_PREFIX} \
     && rm -fr man *.bat *.command *.app Uninstaller /tmp/i2pinstall.jar /tmp/expect \
-    && apk --purge del expect tcl openssl \
+    && apt-get remove --purge --yes expect wget \
+    && apt-get autoremove --purge --yes \
+    && apt-get clean autoclean \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/ /usr/share/man \
     && sed -i 's/127\.0\.0\.1/0.0.0.0/g' ${I2P_PREFIX}/i2ptunnel.config \
     && sed -i 's/::1,127\.0\.0\.1/0.0.0.0/g' ${I2P_PREFIX}/clients.config \
     && printf "i2cp.tcp.bindAllInterfaces=true\n" >> ${I2P_PREFIX}/router.config \

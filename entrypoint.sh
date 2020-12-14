@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 SGID=`getent group i2p | cut -d: -f3`
 SUID=`id -u i2p`
@@ -23,7 +23,7 @@ chown -R i2p:$PGID $I2P_PREFIX
 chmod -R u+rwx /storage
 chmod -R u+rwx $I2P_PREFIX
 
-exec su-exec i2p $I2P_PREFIX/i2psvc $I2P_PREFIX/wrapper.config wrapper.pidfile=/var/tmp/i2p.pid \
+exec gosu i2p $I2P_PREFIX/i2psvc $I2P_PREFIX/wrapper.config wrapper.pidfile=/var/tmp/i2p.pid \
    wrapper.name=i2p \
    wrapper.displayname="I2P Service" \
    wrapper.statusfile=/var/tmp/i2p.status \
