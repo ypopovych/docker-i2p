@@ -2,9 +2,9 @@ FROM alpine:3
 
 LABEL maintainer="Yehor Popovych <popovych.yegor@gmail.com>"
 
-ENV I2P_VERSION="0.9.47"
+ENV I2P_VERSION="0.9.48"
 ENV I2P_PREFIX="/opt/i2p"
-ENV I2P_SHASUM="3ddf3afb0c06edeed4810c6d1f34d909959dd94640adf7c638781b4a3b282e9e  /tmp/i2pinstall.jar"
+ENV I2P_SHASUM="5dd5c300d3d2ca4eb7f7b33a2d4c9e54814f02c199c5176db17f214c8ab655d2  /tmp/i2pinstall.jar"
 
 # adding i2p user
 RUN mkdir /storage \
