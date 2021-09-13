@@ -2,9 +2,9 @@ FROM debian:stable-slim
 
 LABEL maintainer="Yehor Popovych <popovych.yegor@gmail.com>"
 
-ENV I2P_VERSION="0.9.50"
+ENV I2P_VERSION="1.5.0"
 ENV I2P_PREFIX="/opt/i2p"
-ENV I2P_SHASUM="34902d2a7e678fda9261d489ab315661bd2915b9d0d81165acdee008d9031430  /tmp/i2pinstall.jar"
+ENV I2P_SHASUM="8c843c90870223b4808065761d059a02b168b74daddd1773c36f0a0245e201f9  /tmp/i2pinstall.jar"
 
 # adding i2p user
 RUN useradd -d /storage -U -m i2p \
