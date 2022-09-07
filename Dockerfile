@@ -2,9 +2,9 @@ FROM debian:stable-slim
 
 LABEL maintainer="Yehor Popovych <popovych.yegor@gmail.com>"
 
-ENV I2P_VERSION="1.5.0"
+ENV I2P_VERSION="1.9.0"
 ENV I2P_PREFIX="/opt/i2p"
-ENV I2P_SHASUM="8c843c90870223b4808065761d059a02b168b74daddd1773c36f0a0245e201f9  /tmp/i2pinstall.jar"
+ENV I2P_SHASUM="124a1d917dec1f75dc17b5a062704d5abe259b874655c595a9d8f5fd9494eafd  /tmp/i2pinstall.jar"
 
 # adding i2p user
 RUN useradd -d /storage -U -m i2p \
@@ -17,7 +17,7 @@ ADD entrypoint.sh /entrypoint.sh
 # The main layer
 RUN mkdir -p /usr/share/man/man1 \
     && apt-get update && apt-get install -y default-jre-headless gosu expect wget \
-    && wget -O /tmp/i2pinstall.jar https://download.i2p2.de/releases/${I2P_VERSION}/i2pinstall_${I2P_VERSION}.jar \
+    && wget -O /tmp/i2pinstall.jar https://files.i2p-projekt.de/${I2P_VERSION}/i2pinstall_${I2P_VERSION}.jar \
     && echo "${I2P_SHASUM}" | sha256sum -c \
     && mkdir -p /opt \
     && chown i2p:i2p /opt \
